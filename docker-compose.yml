@@ -12,7 +12,7 @@ services:
       # - ./data/web/public/favicon.ico:/app/public/favicon.ico:ro  # Customized favicon.ico
       - ./data/web/storage:/app/storage
 
-  judge-server:
+  judge:
     image: winterant/judge:1.2
     container_name: lduoj-judge
     restart: always
