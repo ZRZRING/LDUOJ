@@ -1,5 +1,11 @@
 version: '3'
 
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   web:
     image: winterant/lduoj:1.2
@@ -8,8 +14,9 @@ services:
     ports:
       - 8080:80
     env_file: lduoj.conf
+    logging: *default-logging
     volumes:
-      # - ./data/web/public/favicon.ico:/app/public/favicon.ico:ro  # Customized favicon.ico
+      # - ./data/web/public/favicon.ico:/app/public/favicon.ico:ro
       - ./data/web/storage:/app/storage
 
   judge:
@@ -17,6 +24,7 @@ services:
     container_name: lduoj-judge
     restart: always
     env_file: lduoj.conf
+    logging: *default-logging
     volumes:
       - ./data/web/storage/app/data:/testdata:ro
 
@@ -36,6 +44,7 @@ services:
       --explicit_defaults_for_timestamp=true
       --log_bin_trust_function_creators=1
     env_file: lduoj.conf
+    logging: *default-logging
     volumes:
       - ./data/mysql:/var/lib/mysql
 
@@ -44,6 +53,7 @@ services:
     container_name: lduoj-redis
     restart: always
     env_file: lduoj.conf
+    logging: *default-logging
     command: [
       "bash", "-c",
       'docker-entrypoint.sh --appendonly yes --requirepass "$$REDIS_PASSWORD"'
